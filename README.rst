@@ -63,8 +63,9 @@ penalty on the News20 dataset (c.f., `Blondel et al. 2013
 Dependencies
 ------------
 
-lightning requires Python >= 3.7, setuptools, Joblib, Numpy >= 1.12, SciPy >= 0.19 and
-scikit-learn >= 0.19. Building from source also requires Cython and a working C/C++ compiler. To run the tests you will also need pytest.
+lightning requires Python >= 3.13, Joblib, Numpy >= 2.1, SciPy >= 1.14.1 and
+scikit-learn >= 1.5.2. Building from source also requires a working C/C++
+compiler and Cython >= 3.1. To run the tests you will also need pytest.
 
 Installation
 ------------
@@ -87,7 +88,13 @@ The development version of lightning can be installed from its git repository. I
 
   git clone https://github.com/scikit-learn-contrib/lightning.git
   cd lightning
-  python setup.py install
+  pip install .
+
+The same commands build and install a specific commit or tag. For development, an editable install that reuses the compiled extensions is enough:
+
+.. code-block:: sh
+
+  pip install -e .
 
 Documentation
 -------------

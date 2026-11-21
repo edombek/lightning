@@ -4,30 +4,30 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   build-and-deploy-docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 3
       - name: Install Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.13'
       - name: Install package
         run: |
-          pip install -r requirements_build.txt
-          python setup.py install
+          python -m pip install --upgrade pip
+          pip install .
       - name: Build docs
         run: |
-          cd doc
-          pip install -r requirements.txt
-          make html
+          pip install -r doc/requirements.txt
+          sphinx-build -b html doc doc/_build/html
       - name: Deploy docs
-        uses: JamesIves/github-pages-deploy-action@4.1.8
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: ${{ github.workspace }}/doc/_build/html

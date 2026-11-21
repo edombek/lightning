@@ -5,18 +5,10 @@ import os
 import numpy as np
 import scipy.sparse as sp
 
-try:
-    from svmlight_loader import load_svmlight_files
-except ImportError:
-    from sklearn.datasets import load_svmlight_files
-
-from sklearn.datasets.base import get_data_home as _get_data_home
+from sklearn.datasets import get_data_home as _get_data_home
+from sklearn.datasets import load_svmlight_files
+from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.utils import check_random_state
-
-try:
-    from sklearn.model_selection import StratifiedShuffleSplit
-except ImportError:
-    from sklearn.cross_validation import StratifiedShuffleSplit
 
 
 def get_data_home():
@@ -98,9 +90,9 @@ def load_covtype():
 
 def load_covtype_subset():
     X_train, y_train, _, _ = load_covtype()
-    cv = StratifiedShuffleSplit(y_train, train_size=100000, test_size=50000,
-                                n_iterations=1, random_state=0)
-    tr, te = iter(cv).next()
+    cv = StratifiedShuffleSplit(n_splits=1, train_size=100000,
+                                test_size=50000, random_state=0)
+    tr, te = next(iter(cv.split(X_train, y_train)))
     return X_train[tr], y_train[tr], X_train[te], y_train[te]
 
 

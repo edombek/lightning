@@ -93,9 +93,11 @@ class KernelSVC(BaseClassifier):
 
     def _solve(self, A, b):
         if self.solver == "cg":
-            x, info = cg(A, b, tol=self.tol)
+            # `atol=0` keeps the semantics of the deprecated `tol` argument,
+            # i.e. a purely relative stopping criterion.
+            x, info = cg(A, b, rtol=self.tol, atol=0.0)
         elif self.solver == "dense":
-            x = solve(A, b, sym_pos=True)
+            x = solve(A, b, assume_a="pos")
         return x
 
     def _fit_binary(self, K, y, rs):

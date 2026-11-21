@@ -1,4 +1,7 @@
-matplotlib
-sphinx
-sphinx_bootstrap_theme
-sphinx_gallery
+# Documentation dependencies (equivalent to `pip install -e ".[docs]"`).
+-r ../requirements.txt
+-r ../requirements_build.txt
+matplotlib>=3.9
+sphinx>=8
+sphinx-gallery>=0.19
+furo>=2024.08

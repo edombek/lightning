@@ -1,11 +1,11 @@
-PYTHON ?= python
+PYTHON ?= python3
 PYTEST ?= pytest
 DATADIR=$(HOME)/lightning_data
 
 # Compilation...
 
 inplace:
-	$(PYTHON) setup.py build_ext -i
+	$(PYTHON) -m pip install -e .
 
 all: inplace
 
@@ -13,6 +13,7 @@ clean:
 	rm -f lightning/impl/*.cpp lightning/impl/*.html
 	rm -f `find lightning -name "*.pyc"`
 	rm -f `find lightning -name "*.so"`
+	rm -rf build *.egg-info
 
 # Tests...
 #

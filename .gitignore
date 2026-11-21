@@ -7,7 +7,12 @@
 .DS_Store
 build
 *.egg-info/
+lightning.egg-info/
 lightning/**/*.html
+.coverage
+coverage
+tags
+pip-log.txt
 
 dist/
 doc/_build/
@@ -15,20 +20,16 @@ doc/generated/
 doc/auto_examples/
 doc/modules/generated/
 doc/datasets/generated/
-pip-log.txt
-lightning.egg-info/
-.coverage
-coverage
-tags
-coverages.zip
-samples.zip
-doc/coverages.zip
-doc/samples.zip
-coverages
-samples
-doc/coverages
-doc/samples
+doc/sg_execution_times.rst
 
+coverages
+coverages.zip
+samples
+samples.zip
+doc/coverages
+doc/coverages.zip
+doc/samples
+doc/samples.zip
 
 *.nt.bz2
 *.tar.gz

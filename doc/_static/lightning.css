@@ -1,7 +1,4 @@
-.navbar-text {
-    display: none !important;
-}
-
-div.body.content {
+/* Extra spacing above the page body, as with the previous theme. */
+article {
     margin-top: 15px !important;
 }

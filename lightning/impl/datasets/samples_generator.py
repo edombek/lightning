@@ -9,10 +9,7 @@ from sklearn.utils import shuffle as shuffle_func
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import Normalizer
 
-try:
-    from sklearn.model_selection import ShuffleSplit
-except ImportError:
-    from sklearn.cross_validation import ShuffleSplit
+from sklearn.model_selection import ShuffleSplit
 
 
 def _make_nn_regression(n_samples=100, n_features=100, n_informative=10,
@@ -65,10 +62,10 @@ def make_nn_regression(n_samples=100, n_features=100, n_informative=10,
         X = X.toarray()
 
     if test_size > 0:
-        cv = ShuffleSplit(len(y), n_iter=1, random_state=random_state,
-                          test_size=test_size, train_size=1-test_size)
+        cv = ShuffleSplit(n_splits=1, random_state=random_state,
+                          test_size=test_size, train_size=1 - test_size)
 
-        train, test = list(cv)[0]
+        train, test = next(iter(cv.split(np.empty(len(y)), y)))
         X_train, y_train = X[train], y[train]
         X_test, y_test = X[test], y[test]
         if not dense:

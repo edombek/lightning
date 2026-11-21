@@ -12,6 +12,7 @@ print(__doc__)
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from lightning.impl.sag import SAGAClassifier
 
 # we create 20 points
@@ -33,17 +34,25 @@ clf = SAGAClassifier(alpha=0.01, loss='log')
 clf.fit(X, y)
 Z = clf.decision_function(np.c_[xx.ravel(), yy.ravel()])
 Z = Z.reshape(xx.shape)
-no_weights = plt.contour(xx, yy, Z, levels=[0], linestyles=['solid'])
+plt.contour(xx, yy, Z, levels=[0], linestyles=['solid'], colors="black")
 
 # fit the weighted model
 clf = SAGAClassifier(alpha=0.01, loss='log')
 clf.fit(X, y, sample_weight=sample_weight)
 Z = clf.decision_function(np.c_[xx.ravel(), yy.ravel()])
 Z = Z.reshape(xx.shape)
-samples_weights = plt.contour(xx, yy, Z, levels=[0], linestyles=['dashed'])
+plt.contour(xx, yy, Z, levels=[0], linestyles=['dashed'], colors="black")
 
-plt.legend([no_weights.collections[0], samples_weights.collections[0]],
-           ["no weights", "with weights"], loc="lower left")
+# `QuadContourSet.collections` was removed in matplotlib 3.8, so the legend is
+# built from explicit handles instead of from the contour artists.
+plt.legend(
+    handles=[
+        Line2D([0], [0], color="black", linestyle="solid", label="no weights"),
+        Line2D([0], [0], color="black", linestyle="dashed",
+               label="with weights"),
+    ],
+    loc="lower left",
+)
 
 plt.xticks(())
 plt.yticks(())

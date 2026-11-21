@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=77", "cython>=3.1", "numpy>=2.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sklearn-contrib-lightning"
+description = "Large-scale sparse linear classification, regression and ranking in Python"
+requires-python = ">=3.13"
+license = "BSD-3-Clause"
+maintainers = [
+    { name = "Mathieu Blondel", email = "mathieu@mblondel.org" },
+]
+dependencies = [
+    "joblib>=1.3",
+    "numpy>=2.1",
+    "scipy>=1.14.1",
+    "scikit-learn>=1.5.2",
+]
+dynamic = ["version", "readme"]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Programming Language :: C",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development",
+    "Topic :: Scientific/Engineering",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+]
+
+[project.optional-dependencies]
+build = ["cython>=3.1"]
+test = ["pytest>=8", "matplotlib>=3.9"]
+docs = ["matplotlib>=3.9", "sphinx>=8", "sphinx-gallery>=0.19", "furo>=2024.08"]
+
+[tool.setuptools]
+zip-safe = false
+
+[tool.setuptools.dynamic]
+version = { attr = "lightning.__version__" }
+readme = { file = ["README.rst"], content-type = "text/x-rst" }
+
+[tool.setuptools.packages.find]
+include = ["lightning*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.pxd", "*.pyx", "*.h"]
+
+[tool.pytest.ini_options]
+testpaths = ["lightning"]
+
+[tool.cibuildwheel]
+build = ["cp313-*", "cp314-*"]
+skip = ["*_i686", "*_win32"]
+test-requires = ["pytest>=8", "matplotlib>=3.9"]
+test-command = "pytest -v --pyargs lightning"
+manylinux-x86_64-image = "manylinux_2_28"
+manylinux-aarch64-image = "manylinux_2_28"

@@ -18,6 +18,17 @@ from lightning.impl.sag import get_auto_step_size
 from lightning.impl.tests.utils import check_predict_proba
 
 
+def _as_scalar(x):
+    """Return a Python float out of a one-element array.
+
+    The reference implementations below multiply one coefficient vector by one
+    sample, so both the score and the label come back as arrays of size one.
+    NumPy 2 no longer converts such arrays to a scalar implicitly, while the
+    Cython loss functions expect a C double.
+    """
+    return np.asarray(x).ravel()[0]
+
+
 class L1Penalty(object):
 
     def __init__(self, l1=1.0):
@@ -78,7 +89,7 @@ def _fit_sag(X, y, eta, alpha, loss, max_iter, rng):
     # Initialize gradients
     for i in range(n_samples):
         p = coef_.dot(X[i])
-        g[i] = -loss.get_update(p, y[i]) * X[i]
+        g[i] = -loss.get_update(_as_scalar(p), _as_scalar(y[i])) * X[i]
     d = np.sum(g, axis=0)
 
     # Main loop
@@ -86,7 +97,7 @@ def _fit_sag(X, y, eta, alpha, loss, max_iter, rng):
         for _ in range(n_samples):
             i = rng.randint(n_samples - 1)
             p = coef_.dot(X[i])
-            gi = -loss.get_update(p, y[i]) * X[i]
+            gi = -loss.get_update(_as_scalar(p), _as_scalar(y[i])) * X[i]
             coef_ -= eta * ((gi - g[i] + d) / n_samples + alpha * coef_)
             d += gi - g[i]
             g[i] = gi
@@ -106,7 +117,7 @@ def _fit_saga(X, y, eta, alpha, loss, penalty, max_iter, rng):
     # Initialize gradients
     for i in range(n_samples):
         p = coef_.dot(X[i])
-        g[i] = -loss.get_update(p, y[i]) * X[i]
+        g[i] = -loss.get_update(_as_scalar(p), _as_scalar(y[i])) * X[i]
     d = np.sum(g, axis=0)
 
     # Main loop
@@ -114,7 +125,7 @@ def _fit_saga(X, y, eta, alpha, loss, penalty, max_iter, rng):
         for _ in range(n_samples):
             i = rng.randint(n_samples - 1)
             p = coef_.dot(X[i])
-            gi = -loss.get_update(p, y[i]) * X[i]
+            gi = -loss.get_update(_as_scalar(p), _as_scalar(y[i])) * X[i]
             coef_ -= eta * ((gi - g[i] + d / n_samples) + alpha * coef_)
             if penalty is not None:
                 coef_ = penalty.projection(coef_, eta)

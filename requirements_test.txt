@@ -1,2 +1,4 @@
+# Test dependencies (equivalent to `pip install -e ".[test]"`).
 -r requirements.txt
-pytest
+pytest>=8
+matplotlib>=3.9
